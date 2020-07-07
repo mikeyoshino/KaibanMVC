@@ -1,0 +1,176 @@
+﻿@model Kaiban.ViewModel.HomeViewModel
+
+@{
+    ViewBag.Title = "หน้าแรก";
+    ViewBag.Current = "Home";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="jumbotron">
+    @Html.Partial("_AdsSearch", new Kaiban.Models.Search())
+</div>
+@{
+    var slider = @Model.Ads.Take(4).ToList();
+}
+
+<!------ Include the above in your HEAD tag ---------->
+<div class="container">
+    <div class="row">
+        <div class="row">
+            <div class="col-md-9">
+                <h3>
+                    Carousel Product Cart Slider A
+                </h3>
+            </div>
+            <div class="col-md-3">
+                <!-- Controls -->
+                <div class="controls pull-right hidden-xs">
+                    <a class="left fa fa-chevron-left btn btn-success" href="#carousel-example"
+                       data-slide="prev"></a><a class="right fa fa-chevron-right btn btn-success" href="#carousel-example"
+                                                data-slide="next"></a>
+                </div>
+            </div>
+        </div>
+        <div id="carousel-example" class="carousel slide hidden-xs" data-ride="carousel">
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="row">
+                        @for (int i = 0; i < @slider.Count; i++)
+                        {
+                            <div class="col-sm-3">
+                                <div class="col-item">
+                                    <div class="photo">
+                                        <img src="@Model.Ads[i].Poster" class="img-responsive" />
+                                    </div>
+                                    <div class="info">
+                                        <div class="row">
+                                            <div class="price col-md-6">
+                                                <h5>
+                                                    @Model.Ads[i].AdsName
+                                                </h5>
+                                                <h5 class="price-text-color">
+                                                    @Model.Ads[i].Price
+                                                </h5>
+                                            </div>
+                                            <div class="rating hidden-sm col-md-6">
+                                                <i class="price-text-color fa fa-star"></i>
+                                                <i class="price-text-color fa fa-star">
+                                                </i><i class="price-text-color fa fa-star"></i>
+                                                <i class="price-text-color fa fa-star">
+                                                </i><i class="fa fa-star"></i>
+                                            </div>
+                                        </div>
+                                        <div class="separator clear-left">
+                                            <p class="btn-add">
+                                                <i class="fa fa-shopping-cart"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">Add to cart</a>
+                                            </p>
+                                            <p class="btn-details">
+                                                <i class="fa fa-list"></i><a href="http://www.jquery2dotnet.com" class="hidden-sm">More details</a>
+                                            </p>
+                                        </div>
+                                        <div class="clearfix">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    
+    
+    <div class="row">
+        <div class="col-lg-9">
+            
+            
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">อัพเดทห้องใหม่ล่าสุด</div>
+                <div class="panel-body">
+                    
+                    <table id="homeList" class="table" style="width:100%">
+                        <thead class="table-light">
+                        <tr>
+                            <th style="width:35%">รูปภาพ</th>
+                            <th style="width: 65%">ข้อมูล</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var ads in Model.Ads)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="#" class="thumbnail">
+                                        <img src="@ads.Poster" alt="...">
+                                    </a>
+
+                                </td>
+                                <td>
+                                    <div class="mil-product">
+                                        <h5><span class="glyphicon glyphicon-home"></span> @Html.ActionLink(@ads.AdsName, "AdsDetail", "Ads", new { id = ads.Id }, null)</h5>
+                                        <div class="ads-detail">
+                                            <ul>
+                                                <li class="glyphicon glyphicon-home">@ads.BedRoom ห้องนอน</li>
+                                                <li class="glyphicon glyphicon-home">@ads.BathRoom ห้องน้ำ</li>
+                                                <li class="glyphicon glyphicon-home">@ads.SquareMetre ตร.ม</li>
+                                            </ul>
+                                            <div class="house-detail">
+                                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+                                            </div>
+                                            <div class="stage">
+                                                <a href="#">Read More</a>
+                                            </div>
+                                        </div>
+  
+                                        </div>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+            
+            
+
+        </div>
+        <div class="col-sm-3">
+            <div class="list-group">
+                <a href="#" class="list-group-item">First item</a>
+                <a href="#" class="list-group-item">Second item</a>
+                <a href="#" class="list-group-item">Third item</a>
+            </div>
+
+        </div>
+    </div>
+
+    
+</div>
+
+
+
+
+@section scripts
+{
+    <script>
+
+       
+
+        $(document).ready(function () {
+            $("#homeList").dataTable();
+            
+        });
+
+    </script>
+}
+
+

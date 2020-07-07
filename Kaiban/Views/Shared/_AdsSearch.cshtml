@@ -1,0 +1,38 @@
+﻿@model Kaiban.Models.Search
+@{
+    ViewBag.Title = "Search";
+
+}
+
+<h2>Search</h2>
+@using (Html.BeginForm("SearchAds", "Ads", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+{
+
+    <div class="row">
+        <div class="col-sm-3">
+            @Html.TextBoxFor(m => m.Category, new { placeholder="ประเภท", @class = "form-control", rows = "5" })
+            @Html.ValidationMessageFor(m => m.Category)
+        </div>
+        <div class="col-sm-3">
+            @Html.TextBoxFor(m => m.City, new { placeholder = "จังหวัด",  @class = "form-control", rows = "5" })
+            @Html.ValidationMessageFor(m => m.City)
+        </div>
+        <div class="col-sm-3">
+            @Html.TextBoxFor(m => m.County, new { placeholder = "อำเภอ",  @class = "form-control", rows = "5" })
+            @Html.ValidationMessageFor(m => m.County)
+        </div>
+        <div class="col-sm-2">
+            <div style="float: right">
+                <button type="submit" class="btn btn-primary">ค้นหา</button>
+            </div>
+        </div>
+    </div>
+
+
+}
+
+@section Scripts {
+
+
+}
+

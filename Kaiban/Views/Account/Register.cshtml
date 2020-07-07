@@ -1,0 +1,146 @@
+﻿@model Kaiban.Models.RegisterViewModel
+@{
+    ViewBag.Title = "สมัครสมาชิก";
+}
+<br />
+<br />
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <div class="panel panel-default">
+            <div class="panel-heading">สมัครสมาชิกใหม่</div>
+            <div class="panel-body">
+                ยินดีต้อนรับเข้าสู่ KaiBan.com หากท่านต้องการสมัครสมาชิกกรุณกรอกแบบฟอร์มข้างล่างเเล้วกดสมัครสมาชิก กรุณจำอีเมลและรหัสผ่านของท่านหลังจากการสมัครเพื่อเข้าใช้งานในระบบ
+                <hr />
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-lg-2 control-label" })
+                    <div class="col-lg-10">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @id = "inputEmail", @placeholder = "อีเมล์ประจำตัว" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-lg-2 control-label" })
+                    <div class="col-lg-10">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id = "inputPassword", @placeholder = "รหัสผ่าน" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-lg-2 control-label" })
+                    <div class="col-lg-10">
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @id = "inputConfirmPassword", @placeholder = "ยืนยันรหัสผ่าน" })
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="panel panel-default">
+
+            <div class="panel-heading">ข้อมูลส่วนตัว</div>
+            <div class="panel-body">
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ImageAvatar, new { @class = "col-lg-2 control-label" })
+                    <div class="input-group">
+                        <div class="custom-file">
+
+                            <input type="file" name="ImageFile" class="custom-file-input" id="ImagePath"
+                                   aria-describedby="inputGroupFileAddon01" required="">
+
+
+                            <label class="custom-file-label" for="InputFile">Choose file</label>
+                        </div>
+                    </div>
+
+
+                    @Html.ValidationMessageFor(model => model.ImageAvatar)
+                    <div id="divImageMediaPreview" style="padding-top=10px; padding-left: 230px;">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.FirstName, new { @class = "col-lg-2 control-label" })
+                    <div class="col-lg-10">
+                        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @id = "inputEmail", @placeholder = "ชื่อขึ้นต้น" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.LastName, new { @class = "col-lg-2 control-label" })
+                    <div class="col-lg-10">
+                        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", @id = "inputEmail", @placeholder = "นามสกุล" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Address, new { @class = "col-lg-2 control-label" })
+                    <div class="col-lg-10">
+                        @Html.TextBoxFor(m => m.Address, new { @class = "form-control", @id = "inputEmail", @placeholder = "ที่อยู่อาศัย" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.MobilePhone, new { @class = "col-lg-2 control-label" })
+                    <div class="col-lg-10">
+                        @Html.TextBoxFor(m => m.MobilePhone, new { @class = "form-control", @id = "inputEmail", @placeholder = "เบอร์โทรศัพ" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+                <button type="reset" class="btn btn-default">ยกเลิก</button>
+                <button type="submit" class="btn btn-primary">สมัคร</button>
+            </div>
+        </div>
+    </fieldset>
+
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+
+    $("#ImagePath").change(function () {
+        if (typeof (FileReader) != "undefined") {
+            var dvPreview = $("#divImageMediaPreview");
+            dvPreview.html("");
+            $($(this)[0].files).each(function () {
+                var file = $(this);
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = $("<img />");
+                    img.attr("style", "width: 150px; height:150px; padding: 5px");
+                    img.attr("class", "img-thumbnail");
+                    img.attr("src", e.target.result);
+                    dvPreview.append(img);
+                }
+                reader.readAsDataURL(file[0]);
+            });
+        } else {
+            alert("This browser does not support HTML5 FileReader.");
+        }
+    });
+
+</script>
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>  
+<script type="text/javascript">  
+    google.maps.event.addDomListener(window, 'load', function () {  
+        var options = {  
+            types: ['(cities)'],  
+            componentRestrictions: { country: "in" }  
+        };  
+  
+        var input = document.getElementById('Address');  
+        var places = new google.maps.places.Autocomplete(input, options);  
+  
+  
+    });  
+</script> 

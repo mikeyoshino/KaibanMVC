@@ -1,0 +1,103 @@
+﻿@model Kaiban.Models.Category
+
+@{
+    ViewBag.Title = "เพิ่มประเภท";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+    ViewBag.Current = "AddCategory";
+}
+
+<div class="row">
+    <ol class="breadcrumb">
+        <li>
+            <a href="#">
+                <em class="fa fa-home"></em>
+            </a>
+        </li>
+        <li class="active">เพิ่มประเภท</li>
+    </ol>
+</div><!--/.row-->
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">เพิ่มประเภท</h1>
+    </div>
+</div><!--/.row-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+@using (Html.BeginForm("Add", "Category", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+{
+    <fieldset>
+        <div class="panel panel-default">
+            <div class="panel-heading">เพิ่มประเภทของอสังหาได้ที่นี้</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Name, new { @class = "col-lg-2 control-label" })
+                    <div class="col-lg-10">
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @id = "inputEmail", @placeholder = "ประเภทของอสังหา" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Description, new { @class = "col-lg-2 control-label" })
+                    <div class="col-lg-10">
+                        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @id = "inputEmail", @placeholder = "คำอธิบาย", @rows = "3" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">ไอคอนประเภท</div>
+            <div class="panel-body">
+                <div class="form-group col-lg-6">
+                    @Html.LabelFor(model => model.ImagePath)
+                    <div class="input-group">
+                        <div class="custom-file">
+
+                            <input type="file" name="ImageFile" class="custom-file-input" id="ImagePath"
+                                   aria-describedby="inputGroupFileAddon01" required="">
+
+
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ImagePath)
+                    <div id="divImageMediaPreview" style="padding-top: 10px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+                <button type="reset" class="btn btn-default">ยกเลิก</button>
+                <button type="submit" class="btn btn-primary">บันทึก</button>
+            </div>
+        </div>
+    </fieldset>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+
+    $("#ImagePath").change(function () {
+        if (typeof (FileReader) != "undefined") {
+            var dvPreview = $("#divImageMediaPreview");
+            dvPreview.html("");
+            $($(this)[0].files).each(function () {
+                var file = $(this);
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = $("<img />");
+                    img.attr("style", "width: 150px; height:150px; padding: 5px");
+                    img.attr("class", "img-thumbnail");
+                    img.attr("src", e.target.result);
+                    dvPreview.append(img);
+                }
+                reader.readAsDataURL(file[0]);
+            });
+        } else {
+            alert("This browser does not support HTML5 FileReader.");
+        }
+    });
+
+</script>

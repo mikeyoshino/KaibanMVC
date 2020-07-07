@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Kaiban.Models.County>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+    ViewBag.Current = "ListCounty";
+}
+
+<table id="county" class="table table-hover table-bordered" style="width:100%">
+    <thead class="table-dark">
+        <tr>
+            <th style="width: 10px;">@Html.DisplayNameFor(model => model.Id)</th>
+            <th style="width: 180px">@Html.DisplayNameFor(model => model.Name)</th>
+            <th style="width: 180px">@Html.DisplayNameFor(model => model.City.Name)</th>
+            <th style="width: 30px" ;></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var county in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => county.Id)</td>
+
+            <td>@Html.DisplayFor(modelItem => county.Name)</td>
+            <td>@Html.DisplayFor(modelItem => county.City.Name)</td>
+            <td>
+                <a data-county-id="@county.Id" class="btn btn-danger btn-secondary js-delete">Delete</a>
+
+            </td>
+        </tr>
+    }
+    </tbody>
+
+</table>
+
+

@@ -1,0 +1,55 @@
+﻿@model Kaiban.Models.City
+@{
+    ViewBag.Title = "เพิ่มเมือง";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+    ViewBag.Current = "AddCity";
+}
+
+<div class="row">
+    <ol class="breadcrumb">
+        <li>
+            <a href="#">
+                <em class="fa fa-home"></em>
+            </a>
+        </li>
+        <li class="active">เพิ่มเมือง</li>
+    </ol>
+</div><!--/.row-->
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">เพิ่มเมือง</h1>
+    </div>
+</div><!--/.row-->
+
+<div class="panel panel-info">
+    <div class="panel-heading">เพิ่มจังหวัด</div>
+    <div class="panel-body">
+        @using (Html.BeginForm("Add", "Cities"))
+        {
+            @Html.ValidationSummary(true, "Please fix the following errors.")
+            <div class="form-group">
+                @Html.LabelFor(m => m.Name)
+                @Html.TextBoxFor(m => m.Name, new {@class = "form-control"})
+                @Html.ValidationMessageFor(m => m.Name)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.IncreasePY)
+                @Html.TextBoxFor(m => m.IncreasePY, new {@class = "form-control"})
+                @Html.ValidationMessageFor(m => m.IncreasePY)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.PricePerSqureMeter)
+                @Html.TextBoxFor(m => m.PricePerSqureMeter, new {@class = "form-control"})
+                @Html.ValidationMessageFor(m => m.PricePerSqureMeter)
+            </div>
+            @Html.HiddenFor(m => m.Id)
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-primary">Save</button>
+        }
+
+
+    </div>
+</div>

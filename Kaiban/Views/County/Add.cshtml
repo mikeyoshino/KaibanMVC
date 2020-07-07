@@ -1,0 +1,61 @@
+﻿@model Kaiban.ViewModel.CountyViewModel
+
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+    ViewBag.Current = "AddCounty";
+}
+
+<div class="row">
+    <ol class="breadcrumb">
+        <li>
+            <a href="#">
+                <em class="fa fa-home"></em>
+            </a>
+        </li>
+        <li class="active">เพิ่มเขต / อำเภอ</li>
+    </ol>
+</div><!--/.row-->
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">เพิ่มเขต / อำเภอ</h1>
+    </div>
+</div><!--/.row-->
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <fieldset>
+        <div class="panel panel-default">
+            <div class="panel-heading">เพิ่มประเภทของอสังหาได้ที่นี้</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.County.Name, new { @class = "col-lg-2 control-label" })
+                    <div class="col-lg-10">
+                        @Html.TextBoxFor(m => m.County.Name, new { @class = "form-control", @id = "inputEmail", @placeholder = "ประเภทของอสังหา" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.County.City.Name, new { @class = "col-lg-2 control-label" })
+                    <div class="col-lg-10">
+                        @Html.DropDownListFor(m => m.County.CityId, new SelectList(Model.City, "Id", "Name"), "เลือกประเภท", new { @class = "form-control", @id = "inputEmail" })
+                        @Html.ValidationMessageFor(m => m.County.CityId)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+                <button type="reset" class="btn btn-default">ยกเลิก</button>
+                <button type="submit" class="btn btn-primary">บันทึก</button>
+            </div>
+        </div>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

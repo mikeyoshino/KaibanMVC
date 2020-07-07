@@ -1,0 +1,114 @@
+﻿@model IEnumerable<Kaiban.Models.Category>
+
+
+@{
+    ViewBag.Title = "รายชื่อประเภท";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+    ViewBag.Current = "SelectedCategory";
+}
+
+<div class="row">
+    <ol class="breadcrumb">
+        <li>
+            <a href="#">
+                <em class="fa fa-home"></em>
+            </a>
+        </li>
+        <li class="active">รายชื่อประเภท</li>
+    </ol>
+</div><!--/.row-->
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">รายชื่อประเภท</h1>
+    </div>
+</div><!--/.row-->
+
+<table id="categories" class="table table-hover table-bordered" style="width:100%">
+    <thead class="table-dark">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.ImagePath)</th>
+            <th style="width: 100px">@Html.DisplayNameFor(model => model.Name)</th>
+            <th style="width: 180px" ;></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><img src="@Url.Content(item.ImagePath)" width="60" height="60" class="img-thumbnail" /></td>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-dark" })
+                        <a data-categories-id="@item.Id" class="btn btn-danger btn-secondary js-delete">Delete</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+@section scripts
+{
+    <script>
+
+
+        var TeamDetailPostBackURL = '/Application/Details';
+        $(function () {
+            $(".anchorDetail").click(function () {
+                debugger;
+                var $buttonClicked = $(this);
+                var id = $buttonClicked.attr('data-id');
+                var options = { "backdrop": "static", keyboard: true };
+                $.ajax({
+                    type: "GET",
+                    url: TeamDetailPostBackURL,
+                    contentType: "application/json; charset=utf-8",
+                    data: { "Id": id },
+                    datatype: "json",
+                    success: function (data) {
+                        debugger;
+                        $('#myModalContent').html(data);
+                        $('#myModal').modal(options);
+                        $('#myModal').modal('show');
+
+                    },
+                    error: function () {
+                        alert("Dynamic content load failed.");
+                    }
+                });
+            });
+            //$("#closebtn").on('click',function(){
+            //    $('#myModal').modal('hide');
+
+            $("#closbtn").click(function () {
+                $('#myModal').modal('hide');
+            });
+        });
+
+        $(document).ready(function () {
+            $("#categories").dataTable();
+            $("#categories").on("click", ".js-delete",
+                function () {
+                    var button = $(this);
+                    bootbox.confirm("แน่ใจนะว่าจะลบ",
+                        function (result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "Api/Categories/" + button.attr("data-categories-id"),
+                                    method: "DELETE",
+                                    success: function () {
+                                        button.parents("tr").remove();
+                                    }
+                                });
+                            }
+                        });
+
+                });
+        });
+
+    </script>
+}
+

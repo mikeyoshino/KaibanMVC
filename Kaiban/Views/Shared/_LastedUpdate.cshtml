@@ -1,0 +1,20 @@
+﻿@model Kaiban.ViewModel.HomeViewModel
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+
+@foreach (var item in Model.Ads)
+{
+
+    <ul>
+        <li>@Html.DisplayFor(modelItem => item.Poster)</li>
+        <li>@Html.DisplayFor(modelItem => item.Category.Name)</li>
+    </ul>
+    
+
+}
+
+<div class="card">sssssssssss</div>
+

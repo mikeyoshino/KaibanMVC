@@ -1,0 +1,243 @@
+﻿@model Kaiban.ViewModel.AdsViewModel
+@{
+    ViewBag.Title = "ลงประกาศ";
+    ViewBag.Current = "PostAds";
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        
+  
+
+        //Dynamic category selection
+        if ($("#CityId").val() == '0') {
+            var productDefaultValue = "<option value='0'> - Select a Category First - </option>";
+
+            $("#CountyId").html(productDefaultValue).show();
+
+        }
+
+        $("#CityId").change(function () {
+            var selectedItemValue = $(this).val();
+
+            var ddlProducts = $("#CountyId");
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: '@Url.Action("GetCountyByCityId", "Ads")',
+                data: { "id": selectedItemValue },
+                success: function (data) {
+                    ddlProducts.html('');
+                    $.each(data, function (id, option) {
+                        ddlProducts.append($('<option></option>').val(option.id).html(option.name));
+                    });
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert('Found error to load product!!.');
+                }
+            });
+
+
+
+
+        });
+
+    });
+
+</script>
+<style>
+    body {
+        background: #f5f6f5;
+    }
+</style>
+
+<h2>เพิ่มประกาศขาย</h2>
+<h6>เพิ่มประกาศขายบ้าน คอนโด อพาร์ทเม้น กรุณาตรวจเช็ครายละเอียดทุกครั้งก่อนโพส</h6>
+@if (TempData["SM"] != null)
+{
+    <div class="alert alert-success">@TempData["SM"]</div>
+}
+
+
+@using (Html.BeginForm("Add", "Ads", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <div class="container">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Ads.AdsName)
+                        @Html.TextBoxFor(m => m.Ads.AdsName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Ads.AdsName)
+                    </div>
+                    <div class="form-group">
+                        รูปภาพปก
+                        <div class="input-group">
+                            <div class="custom-file">
+
+                                <input type="file" name="ImageFile" class="custom-file-input" id="Poster"
+                                       aria-describedby="inputGroupFileAddon01" required="">
+
+
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Ads.Poster)
+                        <div id="divImageMediaPreview" style="padding-top: 10px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        เลือกรูปภาพบ้าน (หลายรูป)
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" name="images" class="custom-file-input" id="images"
+                                       aria-describedby="inputGroupFileAddon01" required="" multiple>
+
+
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Ads.AdsImage)
+                        <div id="divImageMediaPreview" style="padding-top: 10px;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Ads.Category.Name)
+                        @Html.DropDownListFor(m => m.Ads.CategoryId, new SelectList(Model.Category, "Id", "Name"), "เลือกประเภท", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Ads.CategoryId)
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Ads.BedRoom)
+                        @Html.TextBoxFor(m => m.Ads.BedRoom, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Ads.BedRoom)
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Ads.BathRoom)
+                        @Html.TextBoxFor(m => m.Ads.BathRoom, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Ads.BathRoom)
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Ads.SquareMetre)
+                        @Html.TextBoxFor(m => m.Ads.SquareMetre, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Ads.SquareMetre)
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Ads.Garage)
+                        @Html.TextBoxFor(m => m.Ads.Garage, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Ads.Garage)
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Ads.IsFurnished)
+                        @Html.CheckBoxFor(m => m.Ads.IsFurnished, new { @class = "radio-inline" })
+                        @Html.ValidationMessageFor(m => m.Ads.IsFurnished)
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Ads.Description)
+                        @Html.TextAreaFor(m => m.Ads.Description, new { @class = "form-control", rows = "5" })
+                        @Html.ValidationMessageFor(m => m.Ads.Description)
+                    </div>
+
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Ads.City.Name)
+                        @Html.DropDownListFor(m => m.Ads.CityId, new SelectList(Model.Cities, "Id", "Name"), "เลือกประเภท", new { id = "CityId", @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Ads.CityId)
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Ads.County.Name)
+                        @Html.DropDownListFor(m => m.Ads.CountyId, new SelectList(Model.Counties, "Id", "Name"), "เลือกประเภท", new { id = "CountyId", @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Ads.CountyId)
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Ads.PostCode)
+                        @Html.TextBoxFor(m => m.Ads.PostCode, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Ads.PostCode)
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Ads.Price)
+                        @Html.TextBoxFor(m => m.Ads.Price, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Ads.PostCode)
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="โพสโฆษณา" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+<script>
+
+    $("#Poster").change(function () {
+        if (typeof (FileReader) != "undefined") {
+            var dvPreview = $("#divImageMediaPreview");
+            dvPreview.html("");
+            $($(this)[0].files).each(function () {
+                var file = $(this);
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = $("<img />");
+                    img.attr("style", "width: 150px; height:150px; padding: 5px");
+                    img.attr("class", "img-thumbnail");
+                    img.attr("src", e.target.result);
+                    dvPreview.append(img);
+                }
+                reader.readAsDataURL(file[0]);
+            });
+        } else {
+            alert("This browser does not support HTML5 FileReader.");
+        }
+    });
+
+    function bs_input_file() {
+        $(".input-file").before(
+            function () {
+                if (!$(this).prev().hasClass('input-ghost')) {
+                    var element = $("<input type='file' class='input-ghost' style='visibility:hidden; height:0'>");
+                    element.attr("name", $(this).attr("name"));
+                    element.change(function () {
+                        element.next(element).find('input').val((element.val()).split('\\').pop());
+                    });
+                    $(this).find("button.btn-choose").click(function () {
+                        element.click();
+                    });
+                    $(this).find("button.btn-reset").click(function () {
+                        element.val(null);
+                        $(this).parents(".input-file").find('input').val('');
+                    });
+                    $(this).find('input').css("cursor", "pointer");
+                    $(this).find('input').mousedown(function () {
+                        $(this).parents('.input-file').prev().click();
+                        return false;
+                    });
+                    return element;
+                }
+            }
+        );
+    }
+    $(function () {
+        bs_input_file();
+    });
+
+</script>

@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Kaiban.Models.Ads>
+@{
+    ViewBag.Title = "โฆษณาของฉัน";
+    ViewBag.Current = "Mypost";
+}
+<br />
+<br />
+<div class="container">
+    <div class="col-lg-3">
+        <div class="list-group">
+            <a href="#" class="list-group-item active">โพสของฉัน</a>
+            <a href="#" class="list-group-item">ข้อมูลส่วนตัว</a>
+        </div>
+    </div>
+    <div class="col-lg-9">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="font-size:20px ">กระทู้ของฉัน</div>
+            <div class="panel-body">
+                <table id="myPost" class="table table-hover" style="width:100%">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width:10%">เลขที่</th>
+                            <th>ชื่อโพส</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <h5>คุณยังไม่มีโพส</h5>
+                        }
+                        @foreach (var ads in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @ads.Id
+                                </td>
+                                <td>
+                                    @Html.ActionLink(@ads.AdsName, "AdsDetail", "Ads", new { id = ads.Id }, null)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+@section scripts
+{
+
+    <script>
+        $(document).ready(function () {
+            $("#myPost").dataTable();
+            $("#myPost").on("click", ".js-delete",
+                function () {
+                    var button = $(this);
+                    bootbox.confirm("Are sure to delete record?",
+                        function (result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "Api/Applications/" + button.attr("data-applications-id"),
+                                    method: "DELETE",
+                                    success: function () {
+                                        button.parents("tr").remove();
+                                    }
+                                });
+                            }
+                        });
+
+                });
+        });
+    </script>
+}

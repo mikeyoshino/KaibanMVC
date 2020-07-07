@@ -1,0 +1,112 @@
+﻿@model IEnumerable<Kaiban.Models.Ads>
+@{
+    ViewBag.Title = "จัดการโฆษณา";
+    Layout = "~/Views/Shared/_Admin.cshtml";
+    ViewBag.Current = "Scheduler";
+}
+
+
+<div class="row">
+    <ol class="breadcrumb">
+        <li>
+            <a href="#">
+                <em class="fa fa-home"></em>
+            </a>
+        </li>
+        <li class="active">จัดการโฆษณา</li>
+    </ol>
+</div><!--/.row-->
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">จัดการโฆษณา</h1>
+    </div>
+</div><!--/.row-->
+
+<table id="adses" class="table table-hover table-bordered" style="width:100%">
+    <thead class="table-dark">
+        <tr>
+            <th style="width: 10px;">@Html.DisplayNameFor(model => model.Id)</th>
+            <th style="width: 180px">@Html.DisplayNameFor(model => model.AdsName)</th>
+            <th style="width: 30px" ;></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ads in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => ads.Id)</td>
+
+                <td>@Html.DisplayFor(modelItem => ads.AdsName)</td>
+                <td>
+                        <a data-adses-id="@ads.Id" class="btn btn-danger btn-secondary js-delete">Delete</a>
+      
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+@section scripts
+{
+    <script>
+
+        var TeamDetailPostBackURL = '/Application/Details';
+        $(function () {
+            $(".anchorDetail").click(function () {
+                debugger;
+                var $buttonClicked = $(this);
+                var id = $buttonClicked.attr('data-id');
+                var options = { "backdrop": "static", keyboard: true };
+                $.ajax({
+                    type: "GET",
+                    url: TeamDetailPostBackURL,
+                    contentType: "application/json; charset=utf-8",
+                    data: { "Id": id },
+                    datatype: "json",
+                    success: function (data) {
+                        debugger;
+                        $('#myModalContent').html(data);
+                        $('#myModal').modal(options);
+                        $('#myModal').modal('show');
+
+                    },
+                    error: function () {
+                        alert("Dynamic content load failed.");
+                    }
+                });
+            });
+            //$("#closebtn").on('click',function(){
+            //    $('#myModal').modal('hide');
+
+            $("#closbtn").click(function () {
+                $('#myModal').modal('hide');
+            });
+        });
+
+
+
+        $(document).ready(function () {
+            $("#adses").dataTable();
+            $("#adses").on("click", ".js-delete",
+                function () {
+                    var button = $(this);
+                    bootbox.confirm("คุณแน่ใจที่จะลบโพสนี้?",
+                        function (result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "/api/Ads/" + button.attr("data-adses-id"),
+                                    method: "DELETE",
+                                    success: function () {
+                                        button.parents("tr").remove();
+                                    }
+                                });
+                            }
+                        });
+
+                });
+        });
+
+    </script>
+}
